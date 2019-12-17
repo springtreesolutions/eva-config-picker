@@ -1,6 +1,6 @@
-import { Component, Host, h, State } from '@stencil/core';
-import { initializeFirebaseApp } from '../../firebase';
+import { Component, h, State } from '@stencil/core';
 import firebase from 'firebase/app';
+import { initializeFirebaseApp } from '../../firebase';
 
 enum LoggedInState {
   LOADING,
