@@ -1,8 +1,8 @@
 {
-  "name": "eva-config-picker",
+  "name": "@springtree/eva-config-picker",
   "version": "0.0.0",
   "author": "SpringTree B.V.",
-  "description": "Stencil Component Starter",
+  "description": "Configuration picker for the eva configuration suite",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "es2015": "dist/esm/index.mjs",
