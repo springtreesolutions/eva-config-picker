@@ -1,0 +1,18 @@
+language: node_js
+branches:
+  only:
+    - master
+notifications:
+  email: false
+  slack:
+    # springtree:#new-black-notifies
+    - rooms:
+        - secure: "xLcHsDc/hRH+LW3XKatFpmEVgpsiKREeeHKchMu9IXj8xLPy9iYKXRbB1P/DTb1Y+fQTe/nF6dcANiiTdPAO8uFrSwcRPaE3/hZ8R3VZWmzwZLcMlI01++sKSlMv99YUHNeA7fiW/R+NAWDs/aFRUsKbJ6iUC89CMWUzFowsnQv/iYK2NntVooS+VUgn7qXkcio73MYdWbyvkM665L5IuvaNnUpFtUwlPMmgK7zxAjo26bYDHJHXuzpLocobwgBQpywoPCgDx43nscwo+S6k4IhL0q7KD7/HcAhDCX9/ECSXYHuwekvpOvI5fH/6ZT9pZoTCHsU6gLfNF1X1QAd1BPTlOzDwDZGeXVfy/GU2KKIooxfGYZNJtx82yLvw/N6hGTA/QIbtIwb5z/RnVOR5HLVtA+Rx09bYjan/hqon1Efz6gm3V454zxwfSowjanWcPahoo18SiiJLOViWEVbw3J9E+tJLLOD8XtcO66cltVh+/Rm+37LKUDwqYxXctv+CjlfUkjCkJhsRdZD60Uxc58uMPk2vxGpIo7X7QA0OXvRP+Mu3dShDJ6XhHyu4dpVV/eXdrCTfot9hBmEt5GN5B4sH55F7US8Fzja1RBPpsjqgP4cvrXneOSZjOVRln2fPSGCogpkf4Gl0PZyutOllHOQQvb8YHe8v1cTsUnUI7OY="
+      template:
+        - "*EVA CONFIG PICKER* `%{branch}` - Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} by _%{author}_ %{result} in %{duration}"
+node_js:
+  - node
+script:
+  - npm run build
+after_success:
+  - npm run semantic-release
