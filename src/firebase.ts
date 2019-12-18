@@ -5,7 +5,6 @@ import 'firebase/storage';
 
 export const initializeFirebaseApp = () => {
   if ( firebase.apps.length > 0 ) {
-    console.log('returning existing one');
     return firebase.apps[0];
   } else {
     console.log('returning new one');
