@@ -11,7 +11,7 @@ interface ViewCustomerSmall extends BaseCustomer {
   baseEnvironments: firebase.firestore.DocumentReference[];
 }
 
-interface BaseEnvironment {
+export interface BaseEnvironment {
   endpoint: string;
   type: string;
   customerName: string;
@@ -39,7 +39,7 @@ export class Customers {
    * This will emit whenever an endpoint is selected
    */
   @Event()
-  endPointSelect: EventEmitter<string>;
+  endPointSelect: EventEmitter<BaseEnvironment>;
 
   @State()
   viewCustomers: ViewCustomerSmall[] = [];
@@ -193,7 +193,7 @@ export class Customers {
             <h4>{baseEnvironment.type}</h4>
             <p>
               {baseEnvironment.endpoint}
-              <button class="md" onClick={() => this.selectEndpoint(baseEnvironment.endpoint)}>SELECT</button>
+              <button class="md" onClick={() => this.selectEndpoint(baseEnvironment)}>SELECT</button>
             </p>
           </div>
         )}
@@ -209,8 +209,8 @@ export class Customers {
     }
   }
 
-  private selectEndpoint(endpoint: string) {
-    this.endPointSelect.emit(endpoint);
+  private selectEndpoint(baseEnvironment: BaseEnvironment) {
+    this.endPointSelect.emit(baseEnvironment);
   }
 
 }

@@ -7,7 +7,9 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-
+import {
+  BaseEnvironment,
+} from './components/picker-customers/picker-customers';
 
 export namespace Components {
   interface EvaConfigPicker {}
@@ -56,7 +58,7 @@ declare namespace LocalJSX {
     /**
     * This will emit whenever an endpoint is selected
     */
-    'onEndPointSelect'?: (event: CustomEvent<string>) => void;
+    'onEndPointSelect'?: (event: CustomEvent<BaseEnvironment>) => void;
   }
   interface EvaConfigPickerLogin {}
   interface EvaConfigPickerSpinner {}
