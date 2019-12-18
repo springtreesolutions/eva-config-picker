@@ -1,10 +1,10 @@
 :host {
-  --padding-base: 16px;
-  --border-color: #e5e5e5;
-  --background-color: #FAFAFA;
-  --card-background-color: white;
-  --error-color: red;
-  --border-radius: 4px;
+  --padding-base: var(--config-picker-padding-base, 16px);
+  --border-color:  var(--config-picker-border-color,#e5e5e5);
+  --background-color:  var(--config-picker-background-color,#FAFAFA);
+  --card-background-color: var(--config-picker-card-background-color, white);
+  --error-color: var(--config-picker-error-color, red);
+  --border-radius: var(--config-picker-border-radius, 4px);
 
   display: block;
   font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
