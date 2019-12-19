@@ -26,4 +26,15 @@ When creating new component tags, we recommend _not_ using `stencil` in the comp
 
 ## Consuming this project
 
-Please refer to the [stencil documentation](https://stenciljs.com/docs/overview) on how to consume web components created in this project 
+Please refer to the [stencil documentation](https://stenciljs.com/docs/overview) on how to consume web components created in this project. Also this project has a dependency on two image assets under `src/assets/images/` make sure those are bundled in your final version.
+
+This is how to do so for angular projects
+
+`angular.json` under `build.options.assets`
+```json
+{
+  "glob": "**",
+  "input": "node_modules/@springtree/eva-config-picker/dist/collection/assets/images",
+  "output": "assets/images"
+}
+```
