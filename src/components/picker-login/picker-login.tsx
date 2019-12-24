@@ -26,16 +26,35 @@ export class PickerLogin {
     }
   }
 
+  async loginWithGithub() {
+    try {
+      const githubProvider = new firebase.auth.GithubAuthProvider();
+
+      await firebase.auth().signInWithPopup(githubProvider);
+
+    } catch (error) {
+      console.error('[eva-config-picker-login] Error calling signInWithPopup with the microsoft.com OAuthProvider', error);
+
+      if (error.code === 'auth/account-exists-with-different-credential' ) {
+        alert(error.message);
+      }
+    }
+  }
+
   render() {
     return (
       <div>
-        <div class="loginButton normal" role="login button" onClick={() => this.loginWithGoogle()}>
-          <img class="logoTile" src="assets/images/btn_google_dark_normal_ios.svg" />
+        <div class="login-button google" role="login button" onClick={() => this.loginWithGoogle()}>
+          <img src="assets/images/btn_google_dark_normal_ios.svg" />
           <span>Sign in with Google</span>
         </div>
 
         <img onClick={() => this.loginWithMicrosoft()} class="ms-login-button" src="assets/images/ms-login-button.svg" />
 
+        <div class="login-button github" onClick={() => this.loginWithGithub()}>
+          <img src="assets/images/github_logo.png" alt="github logo"/>
+          <span>Sign in with Github</span>
+        </div>
       </div>
     );
   }
