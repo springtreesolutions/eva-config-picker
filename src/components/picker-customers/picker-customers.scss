@@ -65,6 +65,7 @@ button.md {
   font-weight: 500;
   transition: background-color 300ms;
   background-color: transparent;
+  color: currentColor;
   &:hover {
     background-color: rgba(0,0,0,.12);
   }
