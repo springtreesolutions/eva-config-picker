@@ -1,0 +1,17 @@
+:host {
+  display: inline-block;
+}
+
+.feedback {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+}
+
+.feedback.error {
+  background-color: var(--error-color);
+}
+
+.feedback.success {
+  background-color: var(--success-color);
+}
