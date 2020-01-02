@@ -5,6 +5,50 @@ This will be for eva projects that support switching endpoints runtime.
 
 ![](https://i.gyazo.com/b518b8cf1f6f5e7592f3dd45a25d15f1.gif)
 
+
+## Usage
+
+The only component you will need in order to render all the required UI is the `eva-config-picker`, you will do so the following way.
+
+```html
+<eva-config-picker></eva-config-picker>
+```
+
+This component dispatches a custom event named `endPointSelect`, you can listen to this event in multiple ways.
+
+- Plain JS
+  ```javascript
+  document.querySelector('eva-config-picker').addEventListener( 'endPointSelect', event => {
+    console.log(event.detail); // BaseEnvironment (endpoint, type, customerName)
+  })
+  ```
+- Angular
+  ```html
+  <eva-config-picker (endPointSelect)="onEndPointSelect($event"></eva-config-picker>
+  ```
+
+  ```typescript
+  import { BaseEnvironment } from '@springtree/eva-config-picker';
+  class Component {
+    onEndPointSelect(event: CustomEvent<BaseEnvironment>) {
+      console.log(event.detail); // BaseEnvironment
+    }
+  }
+  ```
+
+Please refer to the [stencil documentation](https://stenciljs.com/docs/overview) on how to consume web components created in this project. Also this project has a dependency on two image assets under `src/assets/images/` make sure those are bundled in your final version.
+
+This is how to do so for angular projects
+
+`angular.json` under `build.options.assets`
+```json
+{
+  "glob": "**",
+  "input": "node_modules/@springtree/eva-config-picker/dist/collection/assets/images",
+  "output": "assets/images"
+}
+```
+
 # Development
 
 Make sure you first run the `nvm use` command as this project has an `.nvmrc` file
@@ -23,18 +67,3 @@ This project automatically publishes when pushed to master with [semantic-releas
 
 When creating new component tags, we recommend _not_ using `stencil` in the component name (ex: `<stencil-datepicker>`). This is because the generated component has little to nothing to do with Stencil; it's just a web component! Instead, use the `eva-config` prefix.
 
-
-## Consuming this project
-
-Please refer to the [stencil documentation](https://stenciljs.com/docs/overview) on how to consume web components created in this project. Also this project has a dependency on two image assets under `src/assets/images/` make sure those are bundled in your final version.
-
-This is how to do so for angular projects
-
-`angular.json` under `build.options.assets`
-```json
-{
-  "glob": "**",
-  "input": "node_modules/@springtree/eva-config-picker/dist/collection/assets/images",
-  "output": "assets/images"
-}
-```
