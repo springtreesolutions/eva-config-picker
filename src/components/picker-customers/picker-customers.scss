@@ -1,13 +1,5 @@
 :host {
-  --padding-base: var(--config-picker-padding-base, 16px);
-  --border-color:  var(--config-picker-border-color,#e5e5e5);
-  --background-color:  var(--config-picker-background-color,#FAFAFA);
-  --card-background-color: var(--config-picker-card-background-color, white);
-  --error-color: var(--config-picker-error-color, red);
-  --border-radius: var(--config-picker-border-radius, 4px);
-
   display: block;
-  font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: var(--background-color);
 }
 
@@ -135,4 +127,8 @@ button.md {
   eva-config-picker-spinner {
     margin-right: var(--padding-base);
   }
+}
+
+eva-config-picker-endpoint-status {
+  margin-left: calc(var(--padding-base) / 2);
 }
