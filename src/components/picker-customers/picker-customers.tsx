@@ -193,6 +193,7 @@ export class Customers {
             <h4>{baseEnvironment.type}</h4>
             <p>
               {baseEnvironment.endpoint}
+              <eva-config-picker-endpoint-status endpoint={baseEnvironment.endpoint}></eva-config-picker-endpoint-status>
               <button class="md" onClick={() => this.selectEndpoint(baseEnvironment)}>SELECT</button>
             </p>
           </div>
