@@ -14,8 +14,13 @@ import {
 export namespace Components {
   interface EvaConfigPicker {}
   interface EvaConfigPickerCustomer {}
+  interface EvaConfigPickerEndpointStatus {
+    'endpoint': string;
+  }
   interface EvaConfigPickerLogin {}
-  interface EvaConfigPickerSpinner {}
+  interface EvaConfigPickerSpinner {
+    'size': number;
+  }
 }
 
 declare global {
@@ -33,6 +38,12 @@ declare global {
     new (): HTMLEvaConfigPickerCustomerElement;
   };
 
+  interface HTMLEvaConfigPickerEndpointStatusElement extends Components.EvaConfigPickerEndpointStatus, HTMLStencilElement {}
+  var HTMLEvaConfigPickerEndpointStatusElement: {
+    prototype: HTMLEvaConfigPickerEndpointStatusElement;
+    new (): HTMLEvaConfigPickerEndpointStatusElement;
+  };
+
   interface HTMLEvaConfigPickerLoginElement extends Components.EvaConfigPickerLogin, HTMLStencilElement {}
   var HTMLEvaConfigPickerLoginElement: {
     prototype: HTMLEvaConfigPickerLoginElement;
@@ -47,6 +58,7 @@ declare global {
   interface HTMLElementTagNameMap {
     'eva-config-picker': HTMLEvaConfigPickerElement;
     'eva-config-picker-customer': HTMLEvaConfigPickerCustomerElement;
+    'eva-config-picker-endpoint-status': HTMLEvaConfigPickerEndpointStatusElement;
     'eva-config-picker-login': HTMLEvaConfigPickerLoginElement;
     'eva-config-picker-spinner': HTMLEvaConfigPickerSpinnerElement;
   }
@@ -60,12 +72,18 @@ declare namespace LocalJSX {
     */
     'onEndPointSelect'?: (event: CustomEvent<BaseEnvironment>) => void;
   }
+  interface EvaConfigPickerEndpointStatus {
+    'endpoint'?: string;
+  }
   interface EvaConfigPickerLogin {}
-  interface EvaConfigPickerSpinner {}
+  interface EvaConfigPickerSpinner {
+    'size'?: number;
+  }
 
   interface IntrinsicElements {
     'eva-config-picker': EvaConfigPicker;
     'eva-config-picker-customer': EvaConfigPickerCustomer;
+    'eva-config-picker-endpoint-status': EvaConfigPickerEndpointStatus;
     'eva-config-picker-login': EvaConfigPickerLogin;
     'eva-config-picker-spinner': EvaConfigPickerSpinner;
   }
@@ -79,6 +97,7 @@ declare module "@stencil/core" {
     interface IntrinsicElements {
       'eva-config-picker': LocalJSX.EvaConfigPicker & JSXBase.HTMLAttributes<HTMLEvaConfigPickerElement>;
       'eva-config-picker-customer': LocalJSX.EvaConfigPickerCustomer & JSXBase.HTMLAttributes<HTMLEvaConfigPickerCustomerElement>;
+      'eva-config-picker-endpoint-status': LocalJSX.EvaConfigPickerEndpointStatus & JSXBase.HTMLAttributes<HTMLEvaConfigPickerEndpointStatusElement>;
       'eva-config-picker-login': LocalJSX.EvaConfigPickerLogin & JSXBase.HTMLAttributes<HTMLEvaConfigPickerLoginElement>;
       'eva-config-picker-spinner': LocalJSX.EvaConfigPickerSpinner & JSXBase.HTMLAttributes<HTMLEvaConfigPickerSpinnerElement>;
     }
