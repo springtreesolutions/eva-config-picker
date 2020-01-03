@@ -52,7 +52,7 @@ export class PickerLogin {
         <img onClick={() => this.loginWithMicrosoft()} class="ms-login-button" src="assets/images/ms-login-button.svg" />
 
         <div class="login-button github" onClick={() => this.loginWithGithub()}>
-          <img src="assets/images/github_logo.png" alt="github logo"/>
+          <img src="assets/images/github-logo.svg" alt="github logo"/>
           <span>Sign in with Github</span>
         </div>
       </div>
