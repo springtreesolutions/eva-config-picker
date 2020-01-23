@@ -3,9 +3,6 @@
 
 This will be for eva projects that support switching endpoints runtime.
 
-![](https://i.gyazo.com/b518b8cf1f6f5e7592f3dd45a25d15f1.gif)
-
-
 ## Usage
 
 The only component you will need in order to render all the required UI is the `eva-config-picker`, you will do so the following way.
