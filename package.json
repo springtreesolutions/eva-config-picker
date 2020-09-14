@@ -24,7 +24,7 @@
     "semantic-release": "semantic-release"
   },
   "devDependencies": {
-    "@stencil/core": "^1.3.3",
+    "@stencil/core": "^1.14.0",
     "semantic-release": "^15.13.1"
   },
   "license": "MIT",
