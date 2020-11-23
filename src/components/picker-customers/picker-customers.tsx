@@ -87,7 +87,7 @@ export class Customers {
 
       }
 
-      this.viewCustomers = viewCustomers;
+      this.viewCustomers = viewCustomers.sort((a, b) => a.name.localeCompare(b.name));
     } catch ( error ) {
       if ( error.code === 'permission-denied' ) {
         this.customerDataState = CustomerDataState.UNAUTHORIZED;
