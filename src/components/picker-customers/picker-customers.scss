@@ -1,6 +1,7 @@
 :host {
   display: block;
   background: var(--background-color);
+  --button-hover-background-color: var(--config-picker-button-hover-background-color, rgba(0,0,0,.12));
 }
 
 img {
@@ -67,7 +68,7 @@ button.md {
   background-color: transparent;
   color: currentColor;
   &:hover {
-    background-color: rgba(0,0,0,.12);
+    background-color: var(--button-hover-background-color);
   }
 }
 

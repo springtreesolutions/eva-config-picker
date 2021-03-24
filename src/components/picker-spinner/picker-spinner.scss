@@ -1,3 +1,8 @@
 :host {
   display: block;
+  --spinner-fill: var(--config-picker-spinner-fill, black);
+}
+
+svg path {
+  fill: var(--spinner-fill);
 }
