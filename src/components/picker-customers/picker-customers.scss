@@ -4,14 +4,6 @@
   --button-hover-background-color: var(--config-picker-button-hover-background-color, rgba(0,0,0,.12));
 }
 
-img {
-  width: 75px;
-  height: 75px;
-  display: block;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
-}
-
 .card {
   background-color: var(--card-background-color);
   width: calc(100% - (var(--padding-base) * 2));

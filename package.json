@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "author": "SpringTree B.V.",
   "description": "Configuration picker for the eva configuration suite",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
   "es2017": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
@@ -24,12 +24,12 @@
     "semantic-release": "semantic-release"
   },
   "devDependencies": {
-    "@stencil/core": "^1.14.0",
+    "@stencil/core": "2.10.0",
     "semantic-release": "^15.13.1"
   },
   "license": "MIT",
   "dependencies": {
-    "@stencil/sass": "^1.1.1",
-    "firebase": "^7.6.0"
+    "@stencil/sass": "^1.5.2",
+    "firebase": "^9.2.0"
   }
 }

@@ -1,5 +1,6 @@
 import { Component, h } from '@stencil/core';
-import firebase from 'firebase/app';
+import { GithubAuthProvider, GoogleAuthProvider, OAuthProvider, signInWithPopup } from "firebase/auth";
+import { firebaseServiceInstance } from '../../firebase';
 
 @Component({
   tag: 'eva-config-picker-login',
@@ -8,9 +9,11 @@ import firebase from 'firebase/app';
 })
 export class PickerLogin {
 
+  auth = firebaseServiceInstance.auth;
+
   async loginWithGoogle() {
     try {
-      await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+      await signInWithPopup(this.auth, new GoogleAuthProvider());
 
     } catch (error) {
       console.error('[eva-config-picker-login] Error calling signInWithPopup with the GoogleAuthProvider sign-in', error);
@@ -19,7 +22,7 @@ export class PickerLogin {
 
   async loginWithMicrosoft() {
     try {
-      await firebase.auth().signInWithPopup(new firebase.auth.OAuthProvider('microsoft.com'));
+      await signInWithPopup(this.auth, new OAuthProvider('microsoft.com'));
 
     } catch (error) {
       console.error('[eva-config-picker-login] Error calling signInWithPopup with the microsoft.com OAuthProvider', error);
@@ -28,9 +31,9 @@ export class PickerLogin {
 
   async loginWithGithub() {
     try {
-      const githubProvider = new firebase.auth.GithubAuthProvider();
+      const githubProvider = new GithubAuthProvider();
 
-      await firebase.auth().signInWithPopup(githubProvider);
+      await signInWithPopup(this.auth, githubProvider);
 
     } catch (error) {
       console.error('[eva-config-picker-login] Error calling signInWithPopup with the microsoft.com OAuthProvider', error);

@@ -21,11 +21,14 @@
 ### Depends on
 
 - [eva-config-picker-spinner](../picker-spinner)
+- [eva-config-picker-endpoint-status](../picker-endpoint-status)
 
 ### Graph
 ```mermaid
 graph TD;
   eva-config-picker-customer --> eva-config-picker-spinner
+  eva-config-picker-customer --> eva-config-picker-endpoint-status
+  eva-config-picker-endpoint-status --> eva-config-picker-spinner
   eva-config-picker --> eva-config-picker-customer
   style eva-config-picker-customer fill:#f9f,stroke:#333,stroke-width:4px
 ```

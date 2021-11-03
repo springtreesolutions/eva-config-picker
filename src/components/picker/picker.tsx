@@ -1,6 +1,6 @@
 import { Component, h, State } from '@stencil/core';
-import firebase from 'firebase/app';
-import { initializeFirebaseApp } from '../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { firebaseServiceInstance } from '../../firebase';
 
 enum LoggedInState {
   LOADING,
@@ -19,9 +19,8 @@ export class Picker {
   loggedIn: LoggedInState = LoggedInState.LOADING;
 
   constructor() {
-    initializeFirebaseApp();
 
-    firebase.app().auth().onAuthStateChanged(auth => {
+    onAuthStateChanged(firebaseServiceInstance.auth, auth => {
       if (!auth) {
         this.loggedIn = LoggedInState.LOGGED_OUT;
       } else if (Boolean(auth.uid)) {

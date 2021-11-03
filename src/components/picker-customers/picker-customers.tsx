@@ -1,14 +1,15 @@
 import { Component, Event, h, State, EventEmitter } from '@stencil/core';
-import firebase from 'firebase/app';
-import { initializeFirebaseApp } from '../../firebase';
-
+import { DocumentReference, collection, getDocs, getDoc } from 'firebase/firestore';
+import { firebaseServiceInstance } from '../../firebase';
+import { signOut } from "firebase/auth";
+import { getDownloadURL, ref } from 'firebase/storage';
 interface BaseCustomer {
   logoPath: string;
   name: string;
 }
 
 interface ViewCustomerSmall extends BaseCustomer {
-  baseEnvironments: firebase.firestore.DocumentReference[];
+  baseEnvironments: DocumentReference[];
 }
 
 export interface BaseEnvironment {
@@ -50,13 +51,16 @@ export class Customers {
   @State()
   customerDataState: CustomerDataState = CustomerDataState.LOADING;
 
+  auth = firebaseServiceInstance.auth;
+
+  firestore = firebaseServiceInstance.firestore;
+
   constructor() {
-    initializeFirebaseApp();
   }
 
   async componentWillLoad() {
     try {
-      const customersSnapshot = await firebase.firestore().collection('customer').get();
+      const customersSnapshot = await getDocs(collection(this.firestore, 'customer'));
 
       const customerDocuments = customersSnapshot.docs;
 
@@ -69,11 +73,9 @@ export class Customers {
           // We don't want the generic customer in the selection UI
           //
           if (customerData.name !== 'generic') {
-            const logoPath = await firebase.storage().ref(customerData.logoPath).getDownloadURL();
-
             const viewCustomer: ViewCustomerSmall = {
               name: customerData.name,
-              logoPath,
+              logoPath: customerData.logoPath,
               baseEnvironments: customerData.baseEnvironments
             }
 
@@ -103,7 +105,7 @@ export class Customers {
     const baseEnvironments = [];
 
     for (const baseEnvironment of customer.baseEnvironments ) {
-      const baseEnvironmentDocumentData = await baseEnvironment.get();
+      const baseEnvironmentDocumentData = await getDoc(baseEnvironment);
 
       const baseEnvironmentData = baseEnvironmentDocumentData.data();
 
@@ -171,7 +173,7 @@ export class Customers {
   private renderCustomerCard(customer) {
     return (
       <div class="card" onClick={() => this.selectCustomer(customer)}>
-        <img src={customer.logoPath} alt={`${customer.name} logo`} />
+        <picker-customer-logo logoPath={customer.logoPath} customerName={customer.name}/>
         <h3>{customer.name}</h3>
       </div>
     )
@@ -184,7 +186,7 @@ export class Customers {
           <div class="back-icon">&#10132;</div>
         </button>
         <div class="card">
-          <img src={this.selectedCustomer.logoPath} alt={`${this.selectedCustomer.name} logo`} />
+          <picker-customer-logo logoPath={this.selectedCustomer.logoPath} customerName={this.selectedCustomer.name}/>
           <h3>{this.selectedCustomer.name}</h3>
         </div>
 
@@ -192,7 +194,7 @@ export class Customers {
           <div class="base-environments-list-item">
             <h4>{baseEnvironment.type}</h4>
             <p>
-              {baseEnvironment.endpoint}
+              <code>{baseEnvironment.endpoint}</code>
               <eva-config-picker-endpoint-status endpoint={baseEnvironment.endpoint}></eva-config-picker-endpoint-status>
               <button class="md" onClick={() => this.selectEndpoint(baseEnvironment)}>SELECT</button>
             </p>
@@ -204,7 +206,7 @@ export class Customers {
 
   private async logout() {
     try {
-      await firebase.auth().signOut();
+      await signOut(this.auth);
     } catch ( error ) {
       console.error('[eva-config-picker-customer] error logging out', error);
     }
