@@ -1,8 +1,7 @@
-import { Component, Event, h, State, EventEmitter } from '@stencil/core';
-import { DocumentReference, collection, getDocs, getDoc } from 'firebase/firestore';
-import { firebaseServiceInstance } from '../../firebase';
+import { Component, Event, EventEmitter, h, State } from '@stencil/core';
 import { signOut } from "firebase/auth";
-import { getDownloadURL, ref } from 'firebase/storage';
+import { collection, DocumentReference, getDoc, getDocs } from 'firebase/firestore';
+import { firebaseServiceInstance } from '../../firebase';
 interface BaseCustomer {
   logoPath: string;
   name: string;
