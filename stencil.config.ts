@@ -16,10 +16,5 @@ export const config: Config = {
   ],
   plugins: [
     sass()
-  ],
-  commonjs: {
-    namedExports: {
-      'node_modules/idb/build/idb.js': ['openDb']
-    }
-  }
+  ]
 };

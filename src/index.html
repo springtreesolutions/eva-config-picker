@@ -9,11 +9,15 @@
 </head>
 <body>
   <eva-config-picker></eva-config-picker>
+  <!-- <eva-config-picker-spinner></eva-config-picker-spinner> -->
 </body>
 </html>
 
 <script>
-document.querySelector('eva-config-picker').addEventListener('onEndPointSelect', e => {
+document.querySelector('eva-config-picker').addEventListener('endPointSelect', e => {
   console.log(e);
 })
+document.querySelector('eva-config-picker').addEventListener('authStateChange', e => {
+  console.log(e);
+});
 </script>

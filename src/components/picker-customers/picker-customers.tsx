@@ -1,25 +1,8 @@
 import { Component, Event, EventEmitter, h, State } from '@stencil/core';
-import { signOut } from "firebase/auth";
-import { collection, DocumentReference, getDoc, getDocs } from 'firebase/firestore';
+import { BaseEnvironment, ExtendedViewCustomer, SummarisedViewCustomer } from '../../typings';
 import { firebaseServiceInstance } from '../../firebase';
-interface BaseCustomer {
-  logoPath: string;
-  name: string;
-}
 
-interface ViewCustomerSmall extends BaseCustomer {
-  baseEnvironments: DocumentReference[];
-}
 
-export interface BaseEnvironment {
-  endpoint: string;
-  type: string;
-  customerName: string;
-}
-
-interface ViewCustomerBig extends BaseCustomer {
-  baseEnvironments: BaseEnvironment[];
-}
 
 enum CustomerDataState {
   LOADED,
@@ -42,10 +25,12 @@ export class Customers {
   endPointSelect: EventEmitter<BaseEnvironment>;
 
   @State()
-  viewCustomers: ViewCustomerSmall[] = [];
+  viewCustomersSummary: SummarisedViewCustomer[] = [];
 
-  @State()
-  selectedCustomer: ViewCustomerBig;
+  @State()/**
+   * will contain all the information in the summary, fetched
+   */
+  selectedCustomer: ExtendedViewCustomer;
 
   @State()
   customerDataState: CustomerDataState = CustomerDataState.LOADING;
@@ -59,36 +44,10 @@ export class Customers {
 
   async componentWillLoad() {
     try {
-      const customersSnapshot = await getDocs(collection(this.firestore, 'customer'));
 
-      const customerDocuments = customersSnapshot.docs;
+      this.viewCustomersSummary = await firebaseServiceInstance.getViewCustomersSummary();
 
-      const viewCustomers = [];
-
-      for (const customerDocument of customerDocuments) {
-        try {
-          const customerData = customerDocument.data();
-
-          // We don't want the generic customer in the selection UI
-          //
-          if (customerData.name !== 'generic') {
-            const viewCustomer: ViewCustomerSmall = {
-              name: customerData.name,
-              logoPath: customerData.logoPath,
-              baseEnvironments: customerData.baseEnvironments
-            }
-
-            viewCustomers.push(viewCustomer);
-          }
-
-          this.customerDataState = CustomerDataState.LOADED
-        } catch (error) {
-          console.error('[eva-config-picker-customer] error getting customer data for', customerDocument);
-        }
-
-      }
-
-      this.viewCustomers = viewCustomers.sort((a, b) => a.name.localeCompare(b.name));
+      this.customerDataState = CustomerDataState.LOADED;
     } catch ( error ) {
       if ( error.code === 'permission-denied' ) {
         this.customerDataState = CustomerDataState.UNAUTHORIZED;
@@ -100,21 +59,8 @@ export class Customers {
     }
   }
 
-  async selectCustomer(customer: ViewCustomerSmall) {
-    const baseEnvironments = [];
-
-    for (const baseEnvironment of customer.baseEnvironments ) {
-      const baseEnvironmentDocumentData = await getDoc(baseEnvironment);
-
-      const baseEnvironmentData = baseEnvironmentDocumentData.data();
-
-      baseEnvironments.push(baseEnvironmentData);
-    }
-
-    this.selectedCustomer = {
-      ...customer,
-      baseEnvironments
-    }
+  async selectCustomer(customer: SummarisedViewCustomer) {
+    this.selectedCustomer = await firebaseServiceInstance.getExtendedViewCustomer(customer);
   }
 
   render() {
@@ -164,7 +110,7 @@ export class Customers {
   private renderCustomers() {
     return (
       <div class="grid-container">
-       { this.viewCustomers.map( customer => this.renderCustomerCard(customer)) }
+       { this.viewCustomersSummary.map( customer => this.renderCustomerCard(customer)) }
       </div>
     )
   }
@@ -205,7 +151,7 @@ export class Customers {
 
   private async logout() {
     try {
-      await signOut(this.auth);
+      await firebaseServiceInstance.signOut();
     } catch ( error ) {
       console.error('[eva-config-picker-customer] error logging out', error);
     }
