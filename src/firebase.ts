@@ -3,8 +3,10 @@ import { collection, getDoc, getDocs, getFirestore } from "@firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import { BaseEnvironment, SummarisedViewCustomer, ExtendedViewCustomer } from "./typings";
+import { getDownloadURL, ref } from '@firebase/storage';
 
 class FirebaseService {
+
 
   app = initializeApp({
     apiKey: "AIzaSyD51D-mGBu-wAOxckCZO2-dk5IRjrYhNlI",
@@ -86,6 +88,10 @@ class FirebaseService {
     }
 
     return extendedViewCustomer;
+  }
+
+  getImageUrl(logoPath: string) {
+    return getDownloadURL(ref(firebaseServiceInstance.storage, logoPath));
   }
 }
 

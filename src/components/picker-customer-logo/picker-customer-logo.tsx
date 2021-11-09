@@ -1,6 +1,4 @@
-import { getDownloadURL } from '@firebase/storage';
-import { Component, Host, h, Prop, State } from '@stencil/core';
-import { ref } from 'firebase/storage';
+import { Component, h, Host, Prop, State } from '@stencil/core';
 import { firebaseServiceInstance } from '../../firebase';
 
 @Component({
@@ -27,7 +25,7 @@ export class PickerCustomerLogo {
   private async loadImageSrc() {
     try {
       console.log(`[eva-picker-customer-logo] getting customer logo for ${this.customerName} with logoPath ${this.logoPath}`);
-      this.logoSrc = await getDownloadURL(ref(firebaseServiceInstance.storage, this.logoPath));
+      this.logoSrc = await firebaseServiceInstance.getImageUrl(this.logoPath);
     } catch (error) {
       console.error(`[eva-picker-customer-logo] error getting customer logo for ${this.customerName}`, error);
     }
