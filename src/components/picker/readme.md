@@ -20,6 +20,7 @@ graph TD;
   eva-config-picker --> eva-config-picker-customer
   eva-config-picker --> eva-config-picker-login
   eva-config-picker-customer --> eva-config-picker-spinner
+  eva-config-picker-customer --> picker-customer-logo
   eva-config-picker-customer --> eva-config-picker-endpoint-status
   eva-config-picker-endpoint-status --> eva-config-picker-spinner
   style eva-config-picker fill:#f9f,stroke:#333,stroke-width:4px

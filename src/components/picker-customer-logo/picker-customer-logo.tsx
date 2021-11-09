@@ -26,9 +26,7 @@ export class PickerCustomerLogo {
 
   private async loadImageSrc() {
     try {
-      // const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-      // await wait(400000);
+      console.log(`[eva-picker-customer-logo] getting customer logo for ${this.customerName} with logoPath ${this.logoPath}`);
       this.logoSrc = await getDownloadURL(ref(firebaseServiceInstance.storage, this.logoPath));
     } catch (error) {
       console.error(`[eva-picker-customer-logo] error getting customer logo for ${this.customerName}`, error);
@@ -40,8 +38,8 @@ export class PickerCustomerLogo {
       <Host>
         <div class="placeholder" style={{
           'opacity': this.logoSrc ? '0' : '1',
-        }}></div>
-
+        }}>
+        </div>
         {this.renderImage()}
       </Host>
     );

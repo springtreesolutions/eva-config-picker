@@ -185,7 +185,7 @@ export class Customers {
           <div class="back-icon">&#10132;</div>
         </button>
         <div class="card">
-          <picker-customer-logo logoPath={this.selectedCustomer.logoPath} customerName={this.selectedCustomer.name}/>
+          <picker-customer-logo key={this.selectedCustomer.name} logoPath={this.selectedCustomer.logoPath} customerName={this.selectedCustomer.name}/>
           <h3>{this.selectedCustomer.name}</h3>
         </div>
 

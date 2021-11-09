@@ -90,6 +90,9 @@ button.md {
   }
 
   .base-environments-list-item {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+
     h4, p {
       margin: 0;
     }
