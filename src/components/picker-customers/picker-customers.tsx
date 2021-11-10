@@ -37,8 +37,6 @@ export class Customers {
 
   auth = firebaseServiceInstance.auth;
 
-  firestore = firebaseServiceInstance.firestore;
-
   constructor() {
   }
 

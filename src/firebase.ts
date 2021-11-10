@@ -1,14 +1,20 @@
 import { getAuth, signOut } from "@firebase/auth";
 import { collection, getDoc, getDocs, getFirestore } from "@firebase/firestore";
-import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-import { BaseEnvironment, SummarisedViewCustomer, ExtendedViewCustomer } from "./typings";
 import { getDownloadURL, ref } from '@firebase/storage';
+import { initializeApp } from "firebase/app";
+import { onAuthStateChanged } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { BaseEnvironment, ExtendedViewCustomer, SummarisedViewCustomer } from "./typings";
+
+export enum AuthState {
+  LOADING = 'loading',
+  LOGGED_IN = 'logged_in',
+  LOGGED_OUT = 'logged_out'
+}
 
 class FirebaseService {
 
-
-  app = initializeApp({
+  private app = initializeApp({
     apiKey: "AIzaSyD51D-mGBu-wAOxckCZO2-dk5IRjrYhNlI",
     authDomain: "eva-customer-manager.firebaseapp.com",
     databaseURL: "https://eva-customer-manager.firebaseio.com",
@@ -20,9 +26,9 @@ class FirebaseService {
 
   auth = getAuth(this.app);
 
-  storage = getStorage(this.app);
+  private storage = getStorage(this.app);
 
-  firestore = getFirestore(this.app);
+  private firestore = getFirestore(this.app);
 
   signOut() {
     return signOut(this.auth);
@@ -92,6 +98,22 @@ class FirebaseService {
 
   getImageUrl(logoPath: string) {
     return getDownloadURL(ref(firebaseServiceInstance.storage, logoPath));
+  }
+
+  /**
+   * Sets up a listener that will notify consumer of the change in logged in state
+   * warning, make sure to subscribe / unsubscribe correctly of this listener
+   */
+  listenToLoggedInStateChange(fn: (isLoggedIn: boolean) => any) {
+    return onAuthStateChanged(firebaseServiceInstance.auth, auth => {
+      if (!auth) {
+        fn(false);
+      } else if (Boolean(auth.uid)) {
+        fn(true);
+      } else {
+        fn(false)
+      }
+    });
   }
 }
 

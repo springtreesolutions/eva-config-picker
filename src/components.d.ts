@@ -5,14 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { AuthState } from "./components/picker/auth-state.enum";
 import { BaseEnvironment } from "./typings";
 export namespace Components {
     interface EvaConfigPicker {
-        /**
-          * This will allow consumers to fetch the data themselves using the build in firebase service, ensuring they can match the look & feel of their application.
-         */
-        "hideCustomerPicker": boolean;
     }
     interface EvaConfigPickerCustomer {
     }
@@ -77,14 +72,6 @@ declare global {
 }
 declare namespace LocalJSX {
     interface EvaConfigPicker {
-        /**
-          * This will allow consumers to fetch the data themselves using the build in firebase service, ensuring they can match the look & feel of their application.
-         */
-        "hideCustomerPicker"?: boolean;
-        /**
-          * will emit whenever the auth state changes
-         */
-        "onAuthStateChange"?: (event: CustomEvent<AuthState>) => void;
     }
     interface EvaConfigPickerCustomer {
         /**

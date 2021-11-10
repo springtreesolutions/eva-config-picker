@@ -1,7 +1,12 @@
-import { Component, EventEmitter, h, Event, State, Prop } from '@stencil/core';
-import { onAuthStateChanged } from 'firebase/auth';
+import { Unsubscribe } from '@firebase/util';
+import { Component, h, State } from '@stencil/core';
 import { firebaseServiceInstance } from '../../firebase';
-import {  AuthState } from './auth-state.enum';
+
+enum AuthState {
+  LOADING = 'loading',
+  LOGGED_IN = 'logged_in',
+  LOGGED_OUT = 'logged_out'
+}
 
 @Component({
   tag: 'eva-config-picker',
@@ -13,41 +18,35 @@ export class Picker {
   @State()
   private authState =  AuthState.LOADING;
 
-  /**
-   * will emit whenever the auth state changes
-   */
-  @Event()
-  authStateChange: EventEmitter< AuthState>;
+  listenToLoggedInUnSubscribe: Unsubscribe;
 
-  /**
-   * This will allow consumers to fetch the data themselves using the build in firebase service, ensuring they can match the look & feel of their application.
-   */
-  @Prop()
-  hideCustomerPicker: boolean = false;
+  connectedCallback() {
+    console.log(`[eva-picker:connectedCallback] creating loggedInStateChange listener`);
 
-  constructor() {
-
-    onAuthStateChanged(firebaseServiceInstance.auth, auth => {
-      if (!auth) {
-        this.authState =  AuthState.LOGGED_OUT;
-      } else if (Boolean(auth.uid)) {
+    this.listenToLoggedInUnSubscribe = firebaseServiceInstance.listenToLoggedInStateChange((isLoggedIn) => {
+      if (isLoggedIn) {
         this.authState =  AuthState.LOGGED_IN;
+      } else {
+        this.authState =  AuthState.LOGGED_OUT;
       }
-
-      this.authStateChange.emit(this.authState);
     });
   }
 
+  disconnectedCallback() {
+    if (this.listenToLoggedInUnSubscribe) {
+      console.log(`[eva-picker:connectedCallback] removing loggedInStateChange listener`);
+      this.listenToLoggedInUnSubscribe();
+    }
+  }
 
   render() {
     if (this.authState ===  AuthState.LOADING) {
       return <eva-config-picker-spinner></eva-config-picker-spinner>;
-    } else if (this.authState ===  AuthState.LOGGED_IN && !this.hideCustomerPicker) {
+    } else if (this.authState ===  AuthState.LOGGED_IN) {
       return <eva-config-picker-customer></eva-config-picker-customer>;
     } else if (this.authState ===  AuthState.LOGGED_OUT) {
       return <eva-config-picker-login></eva-config-picker-login>;
     }
   }
-
 
 }
