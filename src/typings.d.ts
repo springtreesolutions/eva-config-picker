@@ -1,7 +1,5 @@
 import { DocumentReference} from "@firebase/firestore";
 
-export { AuthState } from './components/picker/auth-state.enum'
-
 export interface BaseCustomer {
   logoPath: string;
   name: string;
