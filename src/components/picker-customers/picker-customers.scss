@@ -105,6 +105,11 @@ button.md {
         margin-left: auto;
       }
     }
+
+    p code {
+      width: 65%;
+      flex-shrink: 0;
+    }
   }
 
   .base-environments-list-item + .base-environments-list-item {
