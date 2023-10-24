@@ -1,5 +1,5 @@
 import { getAuth, signOut } from "@firebase/auth";
-import { collection, getDoc, getDocs, getFirestore } from "@firebase/firestore";
+import { collection, getDoc, getDocs, initializeFirestore } from "@firebase/firestore";
 import { getDownloadURL, ref } from '@firebase/storage';
 import { initializeApp } from "firebase/app";
 import { onAuthStateChanged } from "firebase/auth";
@@ -28,7 +28,11 @@ class FirebaseService {
 
   private storage = getStorage(this.app);
 
-  private firestore = getFirestore(this.app);
+  private firestore = initializeFirestore(this.app, {
+    // https://n6k.atlassian.net/browse/OPTR-26776
+    // Use long polling does seem to fix the issue reported
+    experimentalAutoDetectLongPolling: true
+  });
 
   signOut() {
     return signOut(this.auth);
