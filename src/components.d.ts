@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BaseEnvironment } from "./typings";
+export { BaseEnvironment } from "./typings";
 export namespace Components {
     interface EvaConfigPicker {
     }
@@ -17,12 +18,19 @@ export namespace Components {
     interface EvaConfigPickerLogin {
     }
     interface EvaConfigPickerSpinner {
+        /**
+          * @default 40
+         */
         "size": number;
     }
     interface PickerCustomerLogo {
         "customerName": string;
         "logoPath": string;
     }
+}
+export interface EvaConfigPickerCustomerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLEvaConfigPickerCustomerElement;
 }
 declare global {
     interface HTMLEvaConfigPickerElement extends Components.EvaConfigPicker, HTMLStencilElement {
@@ -31,7 +39,18 @@ declare global {
         prototype: HTMLEvaConfigPickerElement;
         new (): HTMLEvaConfigPickerElement;
     };
+    interface HTMLEvaConfigPickerCustomerElementEventMap {
+        "endPointSelect": BaseEnvironment;
+    }
     interface HTMLEvaConfigPickerCustomerElement extends Components.EvaConfigPickerCustomer, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLEvaConfigPickerCustomerElementEventMap>(type: K, listener: (this: HTMLEvaConfigPickerCustomerElement, ev: EvaConfigPickerCustomerCustomEvent<HTMLEvaConfigPickerCustomerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLEvaConfigPickerCustomerElementEventMap>(type: K, listener: (this: HTMLEvaConfigPickerCustomerElement, ev: EvaConfigPickerCustomerCustomEvent<HTMLEvaConfigPickerCustomerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLEvaConfigPickerCustomerElement: {
         prototype: HTMLEvaConfigPickerCustomerElement;
@@ -77,7 +96,7 @@ declare namespace LocalJSX {
         /**
           * This will emit whenever an endpoint is selected
          */
-        "onEndPointSelect"?: (event: CustomEvent<BaseEnvironment>) => void;
+        "onEndPointSelect"?: (event: EvaConfigPickerCustomerCustomEvent<BaseEnvironment>) => void;
     }
     interface EvaConfigPickerEndpointStatus {
         "endpoint"?: string;
@@ -85,31 +104,46 @@ declare namespace LocalJSX {
     interface EvaConfigPickerLogin {
     }
     interface EvaConfigPickerSpinner {
+        /**
+          * @default 40
+         */
         "size"?: number;
     }
     interface PickerCustomerLogo {
         "customerName"?: string;
         "logoPath"?: string;
     }
+
+    interface EvaConfigPickerEndpointStatusAttributes {
+        "endpoint": string;
+    }
+    interface EvaConfigPickerSpinnerAttributes {
+        "size": number;
+    }
+    interface PickerCustomerLogoAttributes {
+        "logoPath": string;
+        "customerName": string;
+    }
+
     interface IntrinsicElements {
         "eva-config-picker": EvaConfigPicker;
         "eva-config-picker-customer": EvaConfigPickerCustomer;
-        "eva-config-picker-endpoint-status": EvaConfigPickerEndpointStatus;
+        "eva-config-picker-endpoint-status": Omit<EvaConfigPickerEndpointStatus, keyof EvaConfigPickerEndpointStatusAttributes> & { [K in keyof EvaConfigPickerEndpointStatus & keyof EvaConfigPickerEndpointStatusAttributes]?: EvaConfigPickerEndpointStatus[K] } & { [K in keyof EvaConfigPickerEndpointStatus & keyof EvaConfigPickerEndpointStatusAttributes as `attr:${K}`]?: EvaConfigPickerEndpointStatusAttributes[K] } & { [K in keyof EvaConfigPickerEndpointStatus & keyof EvaConfigPickerEndpointStatusAttributes as `prop:${K}`]?: EvaConfigPickerEndpointStatus[K] };
         "eva-config-picker-login": EvaConfigPickerLogin;
-        "eva-config-picker-spinner": EvaConfigPickerSpinner;
-        "picker-customer-logo": PickerCustomerLogo;
+        "eva-config-picker-spinner": Omit<EvaConfigPickerSpinner, keyof EvaConfigPickerSpinnerAttributes> & { [K in keyof EvaConfigPickerSpinner & keyof EvaConfigPickerSpinnerAttributes]?: EvaConfigPickerSpinner[K] } & { [K in keyof EvaConfigPickerSpinner & keyof EvaConfigPickerSpinnerAttributes as `attr:${K}`]?: EvaConfigPickerSpinnerAttributes[K] } & { [K in keyof EvaConfigPickerSpinner & keyof EvaConfigPickerSpinnerAttributes as `prop:${K}`]?: EvaConfigPickerSpinner[K] };
+        "picker-customer-logo": Omit<PickerCustomerLogo, keyof PickerCustomerLogoAttributes> & { [K in keyof PickerCustomerLogo & keyof PickerCustomerLogoAttributes]?: PickerCustomerLogo[K] } & { [K in keyof PickerCustomerLogo & keyof PickerCustomerLogoAttributes as `attr:${K}`]?: PickerCustomerLogoAttributes[K] } & { [K in keyof PickerCustomerLogo & keyof PickerCustomerLogoAttributes as `prop:${K}`]?: PickerCustomerLogo[K] };
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "eva-config-picker": LocalJSX.EvaConfigPicker & JSXBase.HTMLAttributes<HTMLEvaConfigPickerElement>;
-            "eva-config-picker-customer": LocalJSX.EvaConfigPickerCustomer & JSXBase.HTMLAttributes<HTMLEvaConfigPickerCustomerElement>;
-            "eva-config-picker-endpoint-status": LocalJSX.EvaConfigPickerEndpointStatus & JSXBase.HTMLAttributes<HTMLEvaConfigPickerEndpointStatusElement>;
-            "eva-config-picker-login": LocalJSX.EvaConfigPickerLogin & JSXBase.HTMLAttributes<HTMLEvaConfigPickerLoginElement>;
-            "eva-config-picker-spinner": LocalJSX.EvaConfigPickerSpinner & JSXBase.HTMLAttributes<HTMLEvaConfigPickerSpinnerElement>;
-            "picker-customer-logo": LocalJSX.PickerCustomerLogo & JSXBase.HTMLAttributes<HTMLPickerCustomerLogoElement>;
+            "eva-config-picker": LocalJSX.IntrinsicElements["eva-config-picker"] & JSXBase.HTMLAttributes<HTMLEvaConfigPickerElement>;
+            "eva-config-picker-customer": LocalJSX.IntrinsicElements["eva-config-picker-customer"] & JSXBase.HTMLAttributes<HTMLEvaConfigPickerCustomerElement>;
+            "eva-config-picker-endpoint-status": LocalJSX.IntrinsicElements["eva-config-picker-endpoint-status"] & JSXBase.HTMLAttributes<HTMLEvaConfigPickerEndpointStatusElement>;
+            "eva-config-picker-login": LocalJSX.IntrinsicElements["eva-config-picker-login"] & JSXBase.HTMLAttributes<HTMLEvaConfigPickerLoginElement>;
+            "eva-config-picker-spinner": LocalJSX.IntrinsicElements["eva-config-picker-spinner"] & JSXBase.HTMLAttributes<HTMLEvaConfigPickerSpinnerElement>;
+            "picker-customer-logo": LocalJSX.IntrinsicElements["picker-customer-logo"] & JSXBase.HTMLAttributes<HTMLPickerCustomerLogoElement>;
         }
     }
 }
