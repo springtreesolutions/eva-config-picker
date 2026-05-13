@@ -1,9 +1,7 @@
-import { getAuth, signOut } from "@firebase/auth";
-import { collection, getDoc, getDocs, initializeFirestore } from "@firebase/firestore";
-import { getDownloadURL, ref } from '@firebase/storage';
 import { initializeApp } from "firebase/app";
-import { onAuthStateChanged } from "firebase/auth";
-import { getStorage } from "firebase/storage";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, getDoc, getDocs, initializeFirestore } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { BaseEnvironment, ExtendedViewCustomer, SummarisedViewCustomer } from "./typings";
 
 export enum AuthState {

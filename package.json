@@ -30,6 +30,6 @@
   "license": "MIT",
   "dependencies": {
     "@stencil/sass": "^3.2.3",
-    "firebase": "^9.2.0"
+    "firebase": "^12.13.0"
   }
 }
