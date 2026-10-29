@@ -1,5 +1,6 @@
 import { Component, Event, EventEmitter, h, State } from '@stencil/core';
 import { BaseEnvironment, ExtendedViewCustomer, SummarisedViewCustomer } from '../../typings';
+import { isAllowedEndpoint } from '../../endpoint';
 import { firebaseServiceInstance } from '../../firebase';
 
 
@@ -58,7 +59,12 @@ export class Customers {
   }
 
   async selectCustomer(customer: SummarisedViewCustomer) {
-    this.selectedCustomer = await firebaseServiceInstance.getExtendedViewCustomer(customer);
+    try {
+      this.selectedCustomer = await firebaseServiceInstance.getExtendedViewCustomer(customer);
+    } catch ( error ) {
+      this.customerDataState = CustomerDataState.FAILED;
+      console.error('[eva-config-picker-customer] error loading base environments', error?.code);
+    }
   }
 
   render() {
@@ -79,7 +85,12 @@ export class Customers {
         </div>
       )
     } else if (this.customerDataState === CustomerDataState.FAILED) {
-      return <div class="error-feedback">Error loading.</div>
+      return (
+        <div>
+          <span class="error-feedback">Error loading.  </span>
+          <button class="md" onClick={() => this.logout()}>LOGOUT</button>
+        </div>
+      )
     } else if (this.customerDataState === CustomerDataState.UNAUTHORIZED) {
       return this.renderShowUnauthorizedError();
     }
@@ -156,6 +167,11 @@ export class Customers {
   }
 
   private selectEndpoint(baseEnvironment: BaseEnvironment) {
+    if (!isAllowedEndpoint(baseEnvironment.endpoint)) {
+      console.error('[eva-config-picker-customer] refusing to select a non-https endpoint');
+      return;
+    }
+
     this.endPointSelect.emit(baseEnvironment);
   }
 

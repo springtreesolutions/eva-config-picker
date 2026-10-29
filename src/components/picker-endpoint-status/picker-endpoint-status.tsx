@@ -1,4 +1,5 @@
 import { Component, h, Prop, Watch, State, ComponentWillLoad } from '@stencil/core';
+import { isAllowedEndpoint } from '../../endpoint';
 
 enum EndpointStatus {
   LOADING,
@@ -21,8 +22,6 @@ export class PickerEndpointStatus implements ComponentWillLoad {
 
   @Watch('endpoint')
   onEndPointChange(newEndpoint: string, oldEndpoint: string) {
-    console.log(newEndpoint);
-    console.log(oldEndpoint);
     if (newEndpoint !== oldEndpoint) {
       this.setEndpointStatus(newEndpoint);
     }
@@ -38,6 +37,13 @@ export class PickerEndpointStatus implements ComponentWillLoad {
     this.endpointStatus = EndpointStatus.LOADING;
 
     let status: EndpointStatus = EndpointStatus.NOK;
+
+    // The endpoint can also be set by the host page, so validate it here as well
+    //
+    if (!isAllowedEndpoint(endpoint)) {
+      this.endpointStatus = status;
+      return status;
+    }
 
     try {
 

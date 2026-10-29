@@ -1,5 +1,5 @@
-import { Unsubscribe } from '@firebase/util';
 import { Component, h, State } from '@stencil/core';
+import { Unsubscribe } from 'firebase/auth';
 import { firebaseServiceInstance } from '../../firebase';
 
 enum AuthState {

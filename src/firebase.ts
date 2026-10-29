@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, getDoc, getDocs, initializeFirestore } from "firebase/firestore";
+import { collection, DocumentReference, getDoc, getDocs, initializeFirestore } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import { isAllowedEndpoint } from "./endpoint";
 import { BaseEnvironment, ExtendedViewCustomer, SummarisedViewCustomer } from "./typings";
 
 export enum AuthState {
@@ -51,6 +52,18 @@ class FirebaseService {
         try {
           const customerData = customerDocument.data();
 
+          // Firestore data is untyped at runtime; skip records that would break sorting or rendering
+          //
+          const isValidCustomer = typeof customerData.name === 'string'
+            && typeof customerData.logoPath === 'string'
+            && Array.isArray(customerData.baseEnvironments)
+            && customerData.baseEnvironments.every(baseEnvironment => baseEnvironment instanceof DocumentReference);
+
+          if (!isValidCustomer) {
+            console.warn('[firebase-service:getViewCustomersSummary] skipping invalid customer', customerDocument.id);
+            continue;
+          }
+
           // We don't want the generic customer in the selection UI
           //
           if (customerData.name !== 'generic') {
@@ -64,7 +77,7 @@ class FirebaseService {
           }
 
         } catch (error) {
-          console.error('[firebase-service:getViewCustomersSummary] error getting customer data for', customerDocument);
+          console.error('[firebase-service:getViewCustomersSummary] error getting customer data for', customerDocument.id);
         }
 
       }
@@ -83,11 +96,26 @@ class FirebaseService {
     const baseEnvironments: BaseEnvironment[] = [];
 
     for (const baseEnvironment of viewCustomerSummary.baseEnvironments ) {
-      const baseEnvironmentDocumentData = await getDoc(baseEnvironment);
+      try {
+        const baseEnvironmentDocumentData = await getDoc(baseEnvironment);
 
-      const baseEnvironmentData = baseEnvironmentDocumentData.data() as BaseEnvironment;
+        if (!baseEnvironmentDocumentData.exists()) {
+          continue;
+        }
 
-      baseEnvironments.push(baseEnvironmentData);
+        const { endpoint, type, customerName } = baseEnvironmentDocumentData.data();
+
+        // Only plain strings may reach rendering, and only https endpoints may be fetched or emitted
+        //
+        if (typeof type !== 'string' || typeof customerName !== 'string' || !isAllowedEndpoint(endpoint)) {
+          console.warn('[firebase-service:getExtendedViewCustomer] skipping invalid base environment', baseEnvironment.path);
+          continue;
+        }
+
+        baseEnvironments.push({ endpoint, type, customerName });
+      } catch (error) {
+        console.error('[firebase-service:getExtendedViewCustomer] error getting base environment', baseEnvironment.path, error?.code);
+      }
     }
 
     const extendedViewCustomer : ExtendedViewCustomer = {

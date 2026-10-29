@@ -16,7 +16,9 @@ export class PickerLogin {
       await signInWithPopup(this.auth, new GoogleAuthProvider());
 
     } catch (error) {
-      console.error('[eva-config-picker-login] Error calling signInWithPopup with the GoogleAuthProvider sign-in', error);
+      // Only log the code: the error object can carry the provider's OAuth tokens in customData
+      //
+      console.error('[eva-config-picker-login] Error calling signInWithPopup with the GoogleAuthProvider sign-in', error?.code);
     }
   }
 
@@ -25,7 +27,7 @@ export class PickerLogin {
       await signInWithPopup(this.auth, new OAuthProvider('microsoft.com'));
 
     } catch (error) {
-      console.error('[eva-config-picker-login] Error calling signInWithPopup with the microsoft.com OAuthProvider', error);
+      console.error('[eva-config-picker-login] Error calling signInWithPopup with the microsoft.com OAuthProvider', error?.code);
     }
   }
 
@@ -36,7 +38,7 @@ export class PickerLogin {
       await signInWithPopup(this.auth, githubProvider);
 
     } catch (error) {
-      console.error('[eva-config-picker-login] Error calling signInWithPopup with the microsoft.com OAuthProvider', error);
+      console.error('[eva-config-picker-login] Error calling signInWithPopup with the GithubAuthProvider', error?.code);
 
       if (error.code === 'auth/account-exists-with-different-credential' ) {
         alert(error.message);
