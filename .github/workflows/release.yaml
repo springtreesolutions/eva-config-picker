@@ -5,11 +5,13 @@ on:
     branches:
       - 'master'
 
-# Only what @semantic-release/github needs to tag, release and comment
+# contents/issues/pull-requests: @semantic-release/github
+# id-token: npm trusted publishing (OIDC). No NPM_TOKEN.
 permissions:
   contents: write
   issues: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -33,6 +35,5 @@ jobs:
 
       - run: npm run semantic-release
         env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           # GITHUB_TOKEN is automatically available
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
