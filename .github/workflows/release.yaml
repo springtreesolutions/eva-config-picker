@@ -5,21 +5,29 @@ on:
     branches:
       - 'master'
 
+# contents/issues/pull-requests: @semantic-release/github
+# id-token: npm trusted publishing (OIDC). No NPM_TOKEN.
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
 jobs:
   release:
     name: Github Action Release
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Read .nvmrc
-        run: echo NVMRC=`cat .nvmrc` >> $GITHUB_ENV
+      - uses: actions/checkout@v7
+        with:
+          # semantic-release authenticates with GITHUB_TOKEN itself; don't leave it in .git/config for npm scripts
+          persist-credentials: false
 
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v7
         with:
-          node-version: ${{ env.NVMRC }}
+          node-version-file: .nvmrc
 
       - run: npm ci
 
@@ -27,6 +35,5 @@ jobs:
 
       - run: npm run semantic-release
         env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           # GITHUB_TOKEN is automatically available
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

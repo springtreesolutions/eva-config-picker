@@ -16,5 +16,9 @@ export const config: Config = {
   ],
   plugins: [
     sass()
-  ]
+  ],
+  devServer: {
+    // Stencil defaults to 0.0.0.0, exposing the dev server (and files on this machine) to the network
+    address: 'localhost'
+  }
 };
