@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "author": "SpringTree B.V.",
   "description": "Configuration picker for the eva configuration suite",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springtreesolutions/eva-config-picker.git"
+  },
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
