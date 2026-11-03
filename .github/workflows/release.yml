@@ -65,7 +65,7 @@ jobs:
 
       - run: npm run build
 
-      # Publishes as latest. Provenance is not generated: npm does not support it
-      # for private repositories
+      # Publishes as latest. npm generates a provenance statement automatically
+      # with trusted publishing, because this repository is public
       #
       - run: npm publish
