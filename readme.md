@@ -110,16 +110,28 @@ it and CI does not. Skipping is break-glass.
 
 # :up: Deploying
 
-This project automatically publishes when pushed to master with [semantic-release](https://github.com/semantic-release/semantic-release).
+The package is published to npm as `@springtree/eva-config-picker` by GitHub
+Actions using [release-please](https://github.com/googleapis/release-please)
+(`.github/workflows/release.yml`). Nothing is published by hand.
 
-The `Build and release` workflow (`.github/workflows/release.yaml`) runs on
-every push to `master`, so on every merged pull request. It runs `npm ci`,
-`npm run build` and then `npm run semantic-release`. semantic-release uses its
-default plugins: it reads the Conventional Commit messages since the last
-release to decide the next version, publishes `@springtree/eva-config-picker`
-to npm, and creates the git tag and GitHub release. It does not commit back to
-`master`.
+1. Every merge to `master` updates a single release pull request with the
+   version bump and changelog since the last release
+   (`release-please-config.json`, current version in
+   `.release-please-manifest.json`)
+2. Merging the release pull request creates the tag and GitHub release
+3. The same workflow then builds and publishes the package under the `latest`
+   dist-tag
 
-The workflow uses no stored npm token. npm publishing uses npm trusted
-publishing (OIDC, `id-token: write`), and the GitHub release uses the
-short-lived `GITHUB_TOKEN`.
+release-please reads the [Conventional Commit](https://www.conventionalcommits.org/)
+messages on `master`: a `fix:` commit makes a patch release, a `feat:` commit
+makes a minor release, and a `BREAKING CHANGE:` footer makes a major release.
+`chore`, `ci`, `docs` and the like release nothing.
+
+Pull requests to `master` are built by `.github/workflows/build.yml`, which
+does not publish.
+
+Publishing uses [npm trusted publishing](https://docs.npmjs.com/trusted-publishers)
+(OIDC), so there is no npm token. The package has a trusted publisher on
+npmjs.com for this repository, workflow `release.yml` and environment
+`npm-publish`. That GitHub environment only allows deployments from `master`,
+so no other branch can publish.
