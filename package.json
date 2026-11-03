@@ -1,6 +1,6 @@
 {
   "name": "@springtree/eva-config-picker",
-  "version": "1.18.0",
+  "version": "1.18.1",
   "author": "SpringTree B.V.",
   "description": "Configuration picker for the eva configuration suite",
   "repository": {
