@@ -55,12 +55,71 @@ the `start` will run a web server pointing to `index.html` in this project.
 
 Need help? Check out the stencil docs [here](https://stenciljs.com/docs/my-first-component).
 
-# Publishing
-
-This project automatically publishes when pushed to master with [semantic-release](https://github.com/semantic-release/semantic-release)
-
-
 ## Naming Components
 
 When creating new component tags, we recommend _not_ using `stencil` in the component name (ex: `<stencil-datepicker>`). This is because the generated component has little to nothing to do with Stencil; it's just a web component! Instead, use the `eva-config` prefix.
 
+## :twisted_rightwards_arrows: Branch strategy and protection
+
+The `master` branch is the default branch and the only long-lived branch. Other
+branches are short-lived feature, chore or Dependabot branches.
+
+The `master` branch has protection enabled against direct pushes.
+All changes need to be done through a pull request. The organisation ruleset
+also blocks force pushes and branch deletion, requires a linear history
+(squash or rebase merges only) and requires a code-owner review.
+
+Every pull request runs the four `supply-chain / *` checks (`secrets`,
+`licences`, `code` and `quarantine`, see [Compliance](#lock-compliance)). An
+admin makes them required checks for `master`. The policy files
+(`.github/CODEOWNERS`, `.github/workflows/compliance.yml` and
+`licence-exemptions.json`) need a review from
+`@springtreesolutions/springtree-admins`, as set in `.github/CODEOWNERS`.
+
+# :lock: Compliance
+
+This repository is gated by SpringTree's shared supply-chain workflow
+(`.github/workflows/compliance.yml`), which runs four checks on every pull
+request and a full-history scan weekly:
+
+| Gate         | Refuses                                                 |
+| ------------ | ------------------------------------------------------- |
+| `secrets`    | a credential committed anywhere in the scanned range    |
+| `licences`   | a dependency whose licence is not on the allow-list     |
+| `code`       | a code pattern the ruleset classes as a security defect |
+| `quarantine` | missing or incorrect package-cooldown configuration     |
+
+A red gate is fixed here, in this repository. What each gate does and which
+inputs it takes is documented in
+[`springtree-ci-workflows`](https://github.com/SpringTree/springtree-ci-workflows).
+
+Packages younger than seven days are refused (`min-release-age` in `.npmrc`).
+That window is a management decision recorded in the secure development
+standard, not a local preference — raise it there first.
+
+## :mag: Before you push
+
+```bash
+git config core.hooksPath .githooks   # once per clone
+brew install gitleaks                 # once per machine
+```
+
+The hook scans the commits you are about to push and refuses the push when
+gitleaks is not installed. It is feedback, not enforcement: `--no-verify` skips
+it and CI does not. Skipping is break-glass.
+
+# :up: Deploying
+
+This project automatically publishes when pushed to master with [semantic-release](https://github.com/semantic-release/semantic-release).
+
+The `Build and release` workflow (`.github/workflows/release.yaml`) runs on
+every push to `master`, so on every merged pull request. It runs `npm ci`,
+`npm run build` and then `npm run semantic-release`. semantic-release uses its
+default plugins: it reads the Conventional Commit messages since the last
+release to decide the next version, publishes `@springtree/eva-config-picker`
+to npm, and creates the git tag and GitHub release. It does not commit back to
+`master`.
+
+The workflow uses no stored npm token. npm publishing uses npm trusted
+publishing (OIDC, `id-token: write`), and the GitHub release uses the
+short-lived `GITHUB_TOKEN`.
