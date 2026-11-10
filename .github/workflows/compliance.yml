@@ -13,6 +13,9 @@ name: compliance
 
 on:
   pull_request:
+    # Required: drafts are skipped below, so this is what runs the gates once
+    # a pull request is marked ready. See "Draft pull requests".
+    types: [opened, synchronize, reopened, ready_for_review]
   # On demand, so a full scan can be run without waiting for the schedule —
   # after a fix, or to establish where a repository stands before the gates are
   # required of it.
@@ -58,7 +61,12 @@ jobs:
     # Never run on a pull request from a fork: in a public repository that would
     # execute a stranger's code on our runners. Harmless in a private one. See
     # the springtree-ci-workflows README, "Public repositories and forks".
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    #
+    # Skip draft pull requests too — see "Draft pull requests" in the same
+    # README.
+    if: >-
+      github.event_name != 'pull_request'
+      || (github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft)
     uses: SpringTree/springtree-ci-workflows/.github/workflows/supply-chain.yml@main
     # The shared workflow's licences job asks for id-token: write to read
     # private packages from the springtree-labs registry. A called workflow
